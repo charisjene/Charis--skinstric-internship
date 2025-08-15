@@ -1,0 +1,566 @@
+/* Intro Page Styles */
+.intro-wrapper {
+  min-height: 100vh;
+  background-color: #FCFCFC;
+  position: relative;
+}
+
+/* Top right label */
+.intro-top-label {
+  position: fixed;
+  display: flex;
+  top: 60px;
+  left: 32px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1A1B1C;
+  text-transform: uppercase;
+  letter-spacing: -.02em;
+  z-index: 100;
+}
+
+/* Center the main content vertically and horizontally */
+.intro-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* New flex container for vertical centering */
+.intro-main-flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* Take all available space between nav and bottom buttons */
+  min-height: calc(100vh - 160px); /* Adjust 160px if your nav+buttons are taller/shorter */
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  margin-top: 40px; /* Space below nav */
+  margin-bottom: 80px; /* Space above bottom buttons */
+}
+
+/* Centerpiece groups diamonds and input */
+.intro-centerpiece {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Diamonds fill the centerpiece and are centered */
+.diamond-container {
+  position: relative;
+  width: 360px;
+  height: 360px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Input content is centered and above diamonds */
+.intro-content {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  background: transparent;
+  text-align: center;
+  /* Remove extra margins if any */
+}
+
+
+.diamond {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 1px dashed rgba(26, 27, 28, 0.2);
+  transform-origin: center;
+}
+
+.diamond-small {
+  width: 280px;
+  height: 280px;
+  border-color: rgba(26, 27, 28, 0.3);
+  transform: translate(-50%, -50%) rotate(45deg);
+  animation: spin-slowest 120s linear infinite;
+}
+
+
+.diamond-medium {
+  width: 350px;
+  height: 350px;
+  border-color: rgba(26, 27, 28, 0.2);
+  transform: translate(-50%, -50%) rotate(185deg);
+  animation: spin-slower 90s linear infinite;
+}
+
+
+.diamond-large {
+  width: 420px;
+  height: 420px;
+  border-color: rgba(26, 27, 28, 0.15);
+  transform: translate(-50%, -50%) rotate(190deg);
+  animation: spin-slow 60s linear infinite;
+}
+
+/* Animation Keyframes */
+@keyframes spin-slow {
+  from {
+    transform: translate(-50%, -50%) rotate(190deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(550deg);
+  }
+}
+
+@keyframes spin-slower {
+  from {
+    transform: translate(-50%, -50%) rotate(185deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(-175deg);
+  }
+}
+
+@keyframes spin-slowest {
+  from {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(405deg);
+  }
+}
+
+/* Responsive - Larger sizes on desktop */
+@media (min-width: 768px) {
+  .diamond-small {
+    width: 400px;
+    height: 400px;
+  }
+  
+  .diamond-medium {
+    width: 480px;
+    height: 480px;
+  }
+  
+  .diamond-large {
+    width: 560px;
+    height: 560px;
+  }
+}
+
+/* Content Section */
+.intro-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Click to Type Label */
+.intro-label {
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(26, 27, 28, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0 0 60px 0;
+  margin-bottom: 24px;
+}
+
+/* Form Container */
+.intro-form {
+  width: auto !important;
+  display: block !important;
+  text-align: center;
+}
+
+/* Input Field - Now with large text for both input and placeholder */
+.intro-input {
+  display: inline-block;
+  width: auto !important;
+  /* min-width: 2ch; */
+  max-width: 100%;
+  border: none;
+  border-bottom: 1px solid #000;
+  background: transparent;
+  font-size: 32px;
+  font-weight: 400;
+  text-align: center;
+  color: #1A1B1C;
+  outline: none;
+  letter-spacing: -0.05em;
+  padding: 0;
+  margin: 0 auto;
+  box-sizing: content-box;
+}
+
+.intro-input::placeholder {
+  color: #1A1B1C; /* Same solid color as h1 had */
+  font-size: inherit; 
+  letter-spacing: inherit;
+  font-weight: 400;
+  opacity: 1; /* No transparency */
+}
+
+/* Hide placeholder on focus */
+.intro-input:focus::placeholder {
+  opacity: 0;
+}
+
+/* Disabled state for input */
+.intro-input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Error message styling */
+.intro-error {
+  color: #d32f2f;
+  font-size: 14px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Processing/Loading State */
+.intro-processing {
+  font-size: 48px;
+  font-weight: 400;
+  color: #1A1B1C;
+  letter-spacing: -0.02em;
+  margin: 0 0 40px 0;
+  text-align: center;
+}
+
+/* Loading dots animation */
+.intro-loading-dots {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  background-color: #A0A4AB;
+  border-radius: 50%;
+  animation: pulse 1.4s infinite ease-in-out;
+}
+
+.dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes pulse {
+  0%, 60%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* Thank you / Success State */
+.intro-thank-you {
+  font-size: 48px; /* Smaller to match design */
+  font-weight: 400;
+  color: #1A1B1C;
+  letter-spacing: -0.02em;
+  margin: 0 0 20px 0;
+  text-align: center;
+  line-height: 1;
+}
+
+.intro-proceed {
+  font-size: 18px;
+  font-weight: 400;
+  color: rgba(26, 27, 28, 0.7);
+  text-align: center;
+  margin: 0;
+}
+
+/* Proceed Button - Bottom Right */
+.intro-proceed-btn {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1A1B1C;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  transition: transform 0.3s ease;
+  z-index: 1000; /* Increased z-index to ensure visibility */
+}
+
+.intro-proceed-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Proceed Button Diamond */
+.intro-proceed-diamond {
+  width: 44px;
+  height: 44px;
+  border: 1px solid #1A1B1C;
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+
+
+/* Proceed Arrow */
+.intro-proceed-arrow {
+  transform: rotate(-45deg);
+  font-size: 14px;
+  color: #1A1B1C;
+  line-height: 1;
+  transition: color 0.3s ease;
+}
+
+
+
+/* Responsive adjustments for loading/success states */
+@media (max-width: 640px) {
+  .intro-processing,
+  .intro-thank-you {
+    font-size: 36px;
+  }
+  
+  .intro-proceed {
+    font-size: 16px;
+  }
+  
+  .intro-top-label {
+    top: 70px;
+    right: 20px;
+    font-size: 11px;
+  }
+  
+  .intro-proceed-btn {
+    bottom: 20px;
+    right: 20px;
+  }
+}
+
+.intro-input:focus {
+  outline: none;
+  border-bottom-color: #000000;
+}
+
+/* Responsive - adjusts input size */
+@media (max-width: 640px) {
+  .intro-input {
+    font-size: 48px;
+    width: auto !important;
+  }
+}
+@media (max-width: 480px) {
+  .intro-input {
+    font-size: 36px;
+    width: auto !important;
+  }
+}
+
+/* Back Button Container */
+.intro-back {
+  position: fixed;
+  bottom: 40px;
+  left: 40px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1A1B1C;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  transition: transform 0.3s ease;
+  z-index: 100;
+}
+
+.intro-back:hover {
+  transform: scale(1.05);
+}
+
+/* Back Button Diamond */
+.intro-back-diamond {
+  width: 44px;
+  height: 44px;
+  border: 1px solid #1A1B1C;
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+
+
+/* Back Arrow */
+.intro-back-arrow {
+  transform: rotate(-45deg);
+  font-size: 14px;
+  color: #1A1B1C;
+  line-height: 1;
+  display: block;
+  transition: color 0.3s ease;
+}
+
+
+
+/* Diamond Border Styles */
+.diamond-container {
+  position: relative;
+  width: 360px;
+  height: 360px;
+  margin: 0 auto;
+}
+
+.outer-diamond-border {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 360px;
+  height: 360px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border: 4px dotted rgba(160, 164, 171, 1);
+  pointer-events: none;
+}
+.outer-diamond-border-2 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 420px;
+  height: 420px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border: 4px dotted rgba(160, 164, 171, .6);
+  pointer-events: none;
+}
+.outer-diamond-border-3 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 480px;
+  height: 480px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border: 4px dotted rgba(160, 164, 171, 0.3);
+  pointer-events: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .intro-title {
+    font-size: 48px;
+    margin-bottom: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .diamond-small {
+    width: 280px;
+    height: 280px;
+  }
+  
+  .diamond-medium {
+    width: 340px;
+    height: 340px;
+  }
+  
+  .diamond-large {
+    width: 400px;
+    height: 400px;
+  }
+  
+  .intro-title {
+    font-size: 36px;
+    margin-bottom: 30px;
+  }
+  
+  .intro-input {
+    width: 240px;
+    font-size: 36px;
+  }
+  
+  .intro-back {
+    bottom: 20px;
+    left: 20px;
+  }
+}
+
+/* Adjust diamond and border sizes on smaller screens */
+@media (max-width: 768px) {
+  .diamond-container {
+    width: 250px;
+    height: 250px;
+  }
+  .outer-diamond-border {
+    width: 200px;
+    height: 200px;
+  }
+  .outer-diamond-border-2 {
+    width: 250px;
+    height: 250px;
+  }
+  .outer-diamond-border-3 {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .diamond-container {
+    width: 220px;
+    height: 220px;
+  }
+  .outer-diamond-border {
+    width: 180px;
+    height: 180px;
+  }
+  .outer-diamond-border-2 {
+    width: 200px;
+    height: 200px;
+  }
+  .outer-diamond-border-3 {
+    width: 220px;
+    height: 220px;
+  }
+  .intro-input {
+    font-size: 24px;
+    max-width: 90%;
+  }
+}

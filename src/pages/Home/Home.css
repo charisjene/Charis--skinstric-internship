@@ -1,0 +1,512 @@
+/* Landing */
+
+.main__content {
+    padding: 0;
+    position: relative;
+    height: 100vh;
+}
+
+.center__container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+    top: 50%;
+    left: 50%;
+  transform: translate(-50%, -50%);
+    justify-content: center;
+    height: 71vh;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+}
+
+.center__container.slide-left {
+    transform: translate(calc(-50% - 20vw), -50%);
+}
+
+.center__container.slide-right {
+    transform: translate(calc(-50% + 20vw), -50%);
+}
+
+.main__heading {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    transition: text-align 0.3s;
+}
+
+.main__heading h1 {
+    font-size: 128px;
+    color: #1A1B1C;
+    letter-spacing: -0.09em;
+    line-height: 120px;
+    margin: 0 0 36px;;
+    font-weight: 300;
+}
+
+.main__heading h1 span {
+    font-weight: 400;
+}
+
+.main__heading.align-left {
+  text-align: left;
+}
+
+.main__heading.align-right {
+  text-align: right;
+}
+
+/* Left Section */
+
+.left__section {
+   display: block;
+   position: fixed;
+   top: 50%;
+   left: calc(-25vw);
+   transform: translateY(-50%);
+   width: 500px;
+   height: 500px;
+   opacity: 1;
+   transition: opacity 0.4s ease-in-out;
+   pointer-events: auto;
+}
+
+.left__section.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.left__section__container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.left__triangle {
+    width: 100%;
+    height: 100%;
+    border: 4px dotted #A0A4AB;
+    transform: rotate(45deg);
+    position: absolute;
+    inset: 0;
+    transition: border-color 0.3s ease;
+}
+
+.left__triangle .ripple-1,
+        .left__triangle .ripple-2 {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          border: 4px dotted #A0A4AB;
+          opacity: 0;
+          transition: all 0.4s ease;
+          pointer-events: none;
+        }
+
+        .left__triangle .ripple-1 {
+          transform: scale(1.1);
+        }
+
+        .left__triangle .ripple-2 {
+          transform: scale(1.2);
+        }
+
+        .left__triangle.ripple .ripple-1 {
+          opacity: 0.6;
+          animation: ripple-expand 0.1s ease-out;
+        }
+
+        .left__triangle.ripple .ripple-2 {
+          opacity: 0.3;
+          animation: ripple-expand 0.2s ease-out;
+        }
+
+        @keyframes ripple-expand {
+          from {
+            transform: scale(1);
+            opacity: 0;
+          }
+          to {
+            transform: scale(1.1);
+            opacity: 0.6;
+          }
+        }
+
+        .left__btn:hover ~ .left__triangle {
+          opacity: 1;
+        }
+
+        .left__btn:hover ~ .left__triangle::before {
+          opacity: 0.6;
+          transform: scale(1.1);
+        }
+
+        .left__btn:hover ~ .left__triangle::after {
+          opacity: 0.3;
+          transform: scale(1.2);
+        }
+
+.left__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1A1B1C;
+    cursor: pointer;
+    height: 36px;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%) translateX(45%);
+    background: none;
+    border: none;
+    transition: all 0.3s ease;
+    margin-right: 25px;
+}
+
+.left-diamond {
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    transform: rotate(45deg);
+    cursor: pointer;
+    transition: transform 0.3s, background-color 0.3s ease;
+    background-color: transparent;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 45px;
+}
+
+.left-diamond::after {
+    content: '';
+    position: absolute;
+    width: calc(100% - 8px);
+    height: calc(100% - 8px);
+    border: 1px dotted #A0A4AB;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.left__btn:hover .left-diamond {
+    transform: rotate(45deg) scale(1.3);
+    background-color: transparent;
+    border: 1px solid #1A1B1C;
+}
+
+.left__btn:hover .left-diamond::after {
+          opacity: 1;
+        }
+
+.left__btn:hover .left-arrow {
+    transform: translate(-50%, -50%) rotate(-45deg) scale(0.7);
+}
+
+.btn-arrow.left-arrow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg); 
+    font-size: 12px;
+    line-height: 1;
+    transition: transform 0.3s, color 0.3s ease;
+    color: #1A1B1C;
+    z-index: 1;
+}
+
+/* Right Section */
+
+.right__section {
+    display: block;
+    position: fixed;
+    top: 50%;
+    right: calc(-25vw);
+    transform: translateY(-50%);
+    width: 500px;
+    height: 500px;
+    opacity: 1;
+    transition: opacity 0.4s ease-in-out;
+    pointer-events: auto;
+}
+
+.right__section.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.right__section__container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.right__triangle {
+    width: 100%;
+    height: 100%;
+    border: 4px dotted #A0A4AB;
+    transform: rotate(45deg);
+    position: absolute;
+    inset: 0;
+    transition: border-color 0.3s ease;
+}
+
+.right__triangle .ripple-1,
+        .right__triangle .ripple-2 {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          border: 4px dotted #A0A4AB;
+          opacity: 0;
+          transition: all 0.4s ease;
+          pointer-events: none;
+        }
+
+        .right__triangle .ripple-1 {
+          transform: scale(1.1);
+        }
+
+        .right__triangle .ripple-2 {
+          transform: scale(1.2);
+        }
+
+        .right__triangle.ripple .ripple-1 {
+          opacity: 0.6;
+          animation: ripple-expand-right 0.1s ease-out;
+        }
+
+        .right__triangle.ripple .ripple-2 {
+          opacity: 0.3;
+          animation: ripple-expand-right 0.2s ease-out;
+        }
+
+        @keyframes ripple-expand-right {
+          from {
+            transform: scale(1);
+            opacity: 0;
+          }
+          to {
+            transform: scale(1.1);
+            opacity: 0.6;
+          }
+        }
+
+        .right__btn:hover ~ .right__triangle {
+          opacity: 1;
+        }
+
+        .right__btn:hover ~ .right__triangle::before {
+          opacity: 0.6;
+          transform: scale(1.1);
+        }
+
+        .right__btn:hover ~ .right__triangle::after {
+          opacity: 0.3;
+          transform: scale(1.2);
+        }
+
+.right__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    white-space: nowrap;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1A1B1C;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    height: 36px;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%) translateX(-35%);
+    padding: 4px 12px;
+    background: none;
+    border: none;
+}
+
+.right-diamond {
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    transform: rotate(45deg);
+    transition: transform 0.3s, background-color 0.3s ease;
+    position: relative; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    background-color: transparent;
+}
+
+.right-diamond::after {
+    content: '';
+    position: absolute;
+    width: calc(100% - 8px);
+    height: calc(100% - 8px);
+    border: 1px dashed #A0A4AB;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.right__btn:hover .right-diamond {
+    transform: rotate(45deg) scale(1.1);
+    background-color: transparent;
+    border: 1px solid #1A1B1C;
+}
+
+.right__btn:hover .right-diamond::after {
+    opacity: 1;
+}
+
+.right__btn:hover .right-arrow {
+    color: #1A1B1C;
+    transform: translate(-50%, -50%) rotate(-45deg) scale(0.7);
+}
+
+/* .button-arrow {
+    position: absolute;
+    left: 107px;
+    top: 9px;
+    transform: scale(0.9);
+    cursor: pointer;
+    transition: transform 0.3s;
+} */
+
+.btn-arrow.right-arrow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    font-size: 12px;
+    line-height: 1;
+    transition: transform 0.3s, color 0.3s, ease;
+    color: #1A1B1C;
+    z-index: 1;
+}
+
+/* Shared diamond button styles */
+.diamond-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1A1B1C;
+  text-transform: uppercase;
+  line-height: 16px;
+  transition: transform 0.3s ease;
+}
+
+.diamond-btn:hover {
+  transform: scale(1.05);
+}
+
+.diamond-shape {
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(26, 27, 28, 0.6);
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+  position: relative;
+}
+
+.diamond-shape::after {
+  content: '';
+  position: absolute;
+  width: calc(100% - 8px);
+  height: calc(100% - 8px);
+  border: 1px dashed #A0A4AB;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.diamond-btn:hover .diamond-shape::after {
+  opacity: 1;
+}
+
+.diamond-arrow {
+  transform: rotate(-45deg);
+  font-size: 12px;
+  color: #1A1B1C;
+  line-height: 1;
+  transition: color 0.3s ease, transform 0.3s ease;
+  z-index: 1;
+}
+
+.diamond-btn:hover .diamond-arrow {
+  color: #1A1B1C;
+  transform: rotate(-45deg) scale(0.7);
+}
+
+/* Unique positioning for left/right buttons */
+.left__btn {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%) translateX(45%);
+  margin-right: 25px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.right__btn {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%) translateX(-35%);
+  padding: 4px 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+/* Optional: hover effect enhancements for unique buttons */
+.left__btn:hover {
+  transform: translateY(-50%) translateX(45%) scale(1.05);
+}
+
+.right__btn:hover {
+  transform: translateY(-50%) translateX(-35%) scale(1.05);
+}
+
+
+
+
+.bottom__text {
+    display: block;
+    position: fixed;
+    bottom: 40px;
+    left: 40px;
+    font-weight: normal;
+    font-size: 14px;
+    color: #1A1B1C;
+    text-transform: uppercase;
+
+    /* position: absolute;
+    bottom: 80px;
+    left: 60px;
+    z-index: 1; */
+}
+
+.bottom__text p {
+    font-size: 14px;
+    line-height: 24px;
+    color: #1a1b1c;
+    text-transform: uppercase;
+    font-weight: 400;
+}
+
+
+
+

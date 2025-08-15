@@ -1,0 +1,533 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* FaceScan Page Styles */
+.facescan-wrapper {
+  min-height: 100vh;
+  background-color: #FCFCFC;
+  position: relative;
+}
+
+/* Top left label */
+.facescan-top-label {
+  position: fixed;
+  top: 75px;
+  left: 40px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1A1B1C;
+  text-transform: uppercase;
+  letter-spacing: -0.2%;
+  z-index: 100;
+}
+
+.facescan-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Main content with two options */
+.facescan-content {
+  display: flex;
+  gap: 200px;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  position: relative;
+}
+
+/* Option containers */
+.option-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.option-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.3s ease;
+  position: relative;
+}
+
+
+
+.option-btn:hover {
+  transform: scale(1.02);
+}
+
+/* Option group containing diamonds and icon */
+.option-group {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Diamond group container */
+.diamond-group {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Individual diamonds - static, no rotation */
+.diamond {
+  position: absolute;
+  border: 4px dotted rgba(26, 27, 28, 0.2);
+  transform: rotate(45deg);
+}
+
+/* Diamond 1 - Smallest/innermost */
+.diamond-1 {
+  width: 180px;
+  height: 180px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border-color: rgba(26, 27, 28, 0.4);
+}
+
+/* Diamond 2 - Medium */
+.diamond-2 {
+  width: 240px;
+  height: 240px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border-color: rgba(26, 27, 28, 0.25);
+}
+
+/* Diamond 3 - Largest/outermost */
+.diamond-3 {
+  width: 300px;
+  height: 300px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border-color: rgba(26, 27, 28, 0.1);
+}
+
+/* Added Diamond 4 for better fading */
+.diamond-group::after {
+  content: '';
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border: 4px dotted rgba(26, 27, 28, 0.05);
+}
+
+/* Option icons - centered */
+.option-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 80px;
+}
+
+/* Option labels with line pointer */
+.option-label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 400;
+  color: #1A1B1C;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1;
+  margin: 0;
+  position: absolute;
+  white-space: nowrap;
+}
+
+/* Left option - camera label (upper right area) */
+.option-container:first-child .option-label {
+  top: 35px;
+  right: -110px;
+  text-align: left;
+}
+
+.left-dot {
+    position: absolute;
+    top: 40px;
+    right: 49px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #1A1B1C;
+}
+
+.right-dot {
+    position: absolute;
+    top: 243px;
+    left: 48px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #1A1B1C;
+}
+
+/* Right option - gallery label (lower left area) */
+.option-container:last-child .option-label {
+  bottom: 38px;
+  left: -85px;
+  gap: 6px;
+  text-align: right;
+}
+
+/* Line for camera label */
+.option-container:first-child .option-label::before {
+  content: '';
+  position: absolute;
+  width: 102px;
+  height: 1px;
+  background-color: #1A1B1C;
+  top: 14px; /* Align to middle of single-line text */
+  left: -111.5px; /* Slightly overlap on ○ for connection */
+  transform: rotate(-45deg);
+  transform-origin: right center;
+}
+
+/* Line for gallery label */
+.option-container:last-child .option-label::after {
+  content: '';
+  /* position: absolute; */
+  width: 102px;
+  height: 1px;
+  background-color: #1A1B1C;
+  top: -45px; 
+  right: -200px; 
+  transform: rotate(-45deg);
+  transform-origin: left center;
+}
+
+/* Loading State */
+.camera-loading,
+.gallery-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  position: absolute;
+}
+
+/* Loading diamond container */
+.loading-diamond-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.diamond-small {
+  width: 220px;
+  height: 220px;
+  border-color: rgba(26, 27, 28, 0.3);
+  transform: translate(-50%, -50%) rotate(45deg);
+  animation: spin-slowest 10s linear infinite;
+}
+
+.diamond-medium {
+  width: 260px;
+  height: 260px;
+  border-color: rgba(26, 27, 28, 0.2);
+  transform: translate(-50%, -50%) rotate(185deg);
+  animation: spin-slower 15s linear infinite;
+}
+
+.diamond-large {
+  width: 280px;
+  height: 280px;
+  border-color: rgba(26, 27, 28, 0.15);
+  transform: translate(-50%, -50%) rotate(190deg);
+  animation: spin-slow 20s linear infinite;
+}
+
+@keyframes spin-slow {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes spin-slower {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes spin-slowest {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.loading-icon {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  position: relative;
+  z-index: 2;
+  animation: rotate-icon 2s linear infinite;
+}
+
+@keyframes rotate-icon {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Loading text and indicators */
+.loading-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1A1B1C;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 0 0 60px 0;
+  text-align: center;
+  bottom: 70px;
+  position: relative;
+}
+
+.loading-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.indicator-text {
+  font-size: 14px;
+  font-weight: 400;
+  color: #1A1B1C;
+  text-transform: uppercase;
+  letter-spacing: 0%;
+}
+
+.loading-subtitle {
+  font-size: 14px;
+  font-weight: 400;
+  color: #1A1B1C;
+  text-transform: uppercase;
+  letter-spacing: 0%;
+  line-height: 24px;
+  text-align: center;
+  margin: 0;
+  bottom: 40px;
+  position: relative;
+}
+
+/* Permission Modals */
+.permission-modal {
+  position: absolute;
+  top: 90px; 
+  left: 250px; 
+  background: #1A1B1C;
+  padding: 20px;
+  width: 352px;
+  height: 148px;
+  z-index: 2000;
+  border-radius: 0;
+}
+
+.gallery-modal {
+  position: absolute;
+  bottom: 90px;
+  right: 250px;
+  background: #1A1B1C;
+  padding: 20px;
+  width: 352px;
+  height: 148px;
+  z-index: 2000;
+  border-radius: 0;
+}
+
+.modal-title {
+  color: #FCFCFC;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: left;
+  margin: 0 0 48px 0;
+  line-height: 1.2;
+}
+
+.modal-divider {
+  height: 1px;
+  background: #FCFCFC;
+  margin: 0 -20px 4px -20px;
+}
+
+.modal-buttons {
+  display: flex;
+  position: relative;
+  left: 170px;
+}
+
+.modal-btn {
+  background: none;
+  border: none;
+  padding: 9px 16px 10px 16px;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.deny-btn {
+  color: rgba(255, 255, 255, 0.7); 
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: -2%;
+}
+
+.allow-btn {
+  color: #FCFCFC;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: -2%;
+  width: 80px;
+  height: 35px;
+}
+
+.deny-btn:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.allow-btn:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Back button */
+.facescan-back {
+  position: fixed;
+  bottom: 40px;
+  left: 40px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1A1B1C;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: transform 0.3s ease;
+  z-index: 100;
+}
+
+.facescan-back:hover {
+  transform: scale(1.05);
+}
+
+.back-diamond {
+  width: 44px;
+  height: 44px;
+  border: 1px solid #1A1B1C;
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.back-arrow {
+  transform: rotate(-45deg);
+  font-size: 14px;
+  color: #1A1B1C;
+  line-height: 1;
+  transition: color 0.3s ease;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .facescan-content {
+    flex-direction: column;
+    gap: 80px;
+  }
+  
+  .option-group {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .diamond-1 { width: 150px; height: 150px; }
+  .diamond-2 { width: 200px; height: 200px; }
+  .diamond-3 { width: 250px; height: 250px; }
+  .diamond-group::after { width: 300px; height: 300px; }
+
+  .permission-modal {
+    left: 210px;
+    width: 280px;
+  }
+
+  .gallery-modal {
+    right: 210px;
+    width: 280px;
+  }
+}
+
+@media (max-width: 480px) {
+  .option-group {
+    width: 200px;
+    height: 200px;
+  }
+  
+  .diamond-1 { width: 120px; height: 120px; }
+  .diamond-2 { width: 160px; height: 160px; }
+  .diamond-3 { width: 200px; height: 200px; }
+  .diamond-group::after { width: 240px; height: 240px; }
+  
+  .option-icon {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .permission-modal,
+  .gallery-modal {
+    width: 200px;
+    padding: 15px;
+  }
+
+  .permission-modal {
+    left: 160px;
+  }
+
+  .gallery-modal {
+    right: 160px;
+  }
+
+  .modal-title {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .modal-buttons {
+    left: 100px;
+  }
+
+  .modal-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+}
