@@ -78,107 +78,111 @@ const FaceScan = () => {
   };
 
   const handleFileSelect = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
+  const file = event.target.files[0];
+  if (!file) {
+    return;
+  }
 
-    // Validate file type
-    if (!file.type.startsWith('image/')) {
-      alert('Please select a valid image file (JPEG, PNG, etc.)');
-      return;
+  // Validate file type and size
+  if (!file.type.startsWith('image/')) {
+    alert('Please select a valid image file (JPEG, PNG, etc.)');
+    return;
+  }
+  const maxSize = 10 * 1024 * 1024; // 10MB
+  if (file.size > maxSize) {
+    alert('Image file is too large. Please select an image smaller than 10MB.');
+    return;
+  }
+
+  setIsProcessingGallery(true);
+  
+  // ************************************************************
+  // CORRECTED LINE: Declare the variable outside the try block
+  let base64Image = null; 
+  // ************************************************************
+
+  try {
+    // Convert file to base64
+    base64Image = await convertFileToBase64(file);
+
+    // Ensure the Base64 string is not empty before proceeding
+    if (!base64Image) {
+        throw new Error('Image conversion failed. The Base64 string is empty.');
     }
 
-    // Validate file size (max 10MB)
-    const maxSize = 10 * 1024 * 1024; // 10MB
-    if (file.size > maxSize) {
-      alert('Image file is too large. Please select an image smaller than 10MB.');
-      return;
+    // Remove the data URI header from the string
+    base64Image = base64Image.split(',')[1];
+    
+    // Ensure the Base64 string is not empty after removing the header
+    if (!base64Image) {
+        throw new Error('Image data is missing after processing. Please try a different image.');
     }
 
-    setIsProcessingGallery(true);
+    console.log('Processing uploaded image...');
 
-    try {
-      // Convert file to base64
-      const base64Image = await convertFileToBase64(file);
-      
-      console.log('Processing uploaded image...');
-      
-      // Get user data from localStorage
-      const userData = JSON.parse(localStorage.getItem('skinstric_user_data') || '{}');
-      
-      // Send image to API for demographic analysis using Phase Two endpoint
-      const response = await fetch('https://us-central1-frontend-simplified.cloudfunctions.net/skinstricPhaseTwo', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          Image: base64Image // Note: Capital 'I' as per API spec
-        })
-      });
+    const response = await fetch('https://us-central1-frontend-simplified.cloudfunctions.net/skinstricPhaseTwo', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        Image: base64Image
+      })
+    });
 
-      if (!response.ok) {
-        throw new Error(`API Error: ${response.status} - ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      console.log('Gallery image analysis result:', result);
-      
-      // Transform the API response to our expected format
-      let demographicsData;
-      if (result.data && result.data.race && result.data.age && result.data.gender) {
-        demographicsData = transformAPIResponse(result.data);
-      } else {
-        console.log('API response format unexpected, using mock data');
-        demographicsData = generateMockDemographics();
-        demographicsData.apiMessage = JSON.stringify(result);
-        demographicsData.isSimulated = true;
-      }
-      
-      // Store both the image and analysis result in localStorage
-      localStorage.setItem('skinstric_captured_photo', base64Image);
-      localStorage.setItem('skinstric_demographics', JSON.stringify(demographicsData));
-      
-      // Navigate directly to Analysis page with the data
-      navigate('/analysis', { 
-        state: { 
-          analysisData: {
-            demographicsData: demographicsData,
-            photoData: base64Image,
-            source: 'gallery'
-          }
-        } 
-      });
-      
-    } catch (error) {
-      console.error('Error processing gallery image:', error);
-      
-      // Show user-friendly error message
-      alert(`Analysis failed: ${error.message}. Please try again with a different image.`);
-      
-      // For development/testing purposes, create mock data and proceed
-      const base64Image = await convertFileToBase64(file);
-      const mockDemographics = generateMockDemographics();
-      
-      localStorage.setItem('skinstric_captured_photo', base64Image);
-      localStorage.setItem('skinstric_demographics', JSON.stringify(mockDemographics));
-      
-      navigate('/analysis', { 
-        state: { 
-          analysisData: {
-            demographicsData: mockDemographics,
-            photoData: base64Image,
-            source: 'gallery'
-          }
-        } 
-      });
-    } finally {
-      setIsProcessingGallery(false);
-      // Reset file input
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('API Error Response:', errorText);
+      throw new Error(`API Error: ${response.status} - ${response.statusText}. Details: ${errorText}`);
     }
-  };
+
+    const result = await response.json();
+    console.log('Gallery image analysis result:', result);
+    
+    // Check if the API returned a success status but without the data.
+    if (result.success === false) {
+      throw new Error(result.message || 'API analysis failed with an unknown error.');
+    }
+    
+    // Store both the image and analysis result in localStorage
+    localStorage.setItem('skinstric_captured_photo', `data:${file.type};base64,${base64Image}`);
+    localStorage.setItem('skinstric_demographics', JSON.stringify(transformAPIResponse(result.data)));
+
+    navigate('/analysis', {
+      state: {
+        analysisData: {
+          demographicsData: transformAPIResponse(result.data),
+          photoData: `data:${file.type};base64,${base64Image}`,
+          source: 'gallery'
+        }
+      }
+    });
+
+  } catch (error) {
+    console.error('Error processing gallery image:', error);
+    alert(`Analysis failed: ${error.message}. Please try again with a different image.`);
+    
+    // Since base64Image is now in scope, this should work.
+    const mockDemographics = generateMockDemographics();
+    localStorage.setItem('skinstric_captured_photo', `data:${file.type};base64,${base64Image}`);
+    localStorage.setItem('skinstric_demographics', JSON.stringify(mockDemographics));
+    navigate('/analysis', { 
+      state: { 
+        analysisData: {
+          demographicsData: mockDemographics,
+          photoData: `data:${file.type};base64,${base64Image}`,
+          source: 'gallery'
+        }
+      } 
+    });
+
+  } finally {
+    setIsProcessingGallery(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  }
+};
 
   // Helper function to convert file to base64
   const convertFileToBase64 = (file) => {
@@ -297,7 +301,7 @@ const FaceScan = () => {
               {/* Camera Permission Modal - positioned relative to this container */}
               {showCameraPermissionModal && (
                 <div className="permission-modal">
-                  <h3 className="modal-title">ALLOW A.I. TO ACCESS YOUR CAMERA</h3>
+                  <h3 className="ai-modal-title">ALLOW A.I. TO ACCESS YOUR CAMERA</h3>
                   <div className="modal-divider"></div>
                   <div className="modal-buttons">
                     <button className="modal-btn deny-btn" onClick={handleDenyCamera}>
@@ -324,7 +328,7 @@ const FaceScan = () => {
               {/* Gallery Permission Modal - positioned relative to this container */}
               {showGalleryPermissionModal && (
                 <div className="gallery-modal">
-                  <h3 className="modal-title">ALLOW A.I. TO ACCESS YOUR GALLERY</h3>
+                  <h3 className="ai-modal-title">ALLOW A.I. TO ACCESS YOUR GALLERY</h3>
                   <div className="modal-divider"></div>
                   <div className="modal-buttons">
                     <button className="modal-btn deny-btn" onClick={handleDenyGallery}>
