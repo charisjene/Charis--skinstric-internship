@@ -28,19 +28,17 @@
   position: relative;
 }
 
-/* New flex container for vertical centering */
+
 .intro-main-flex {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* Take all available space between nav and bottom buttons */
-  min-height: calc(100vh - 160px); /* Adjust 160px if your nav+buttons are taller/shorter */
-  width: 100%;
+  min-height: calc(100vh - 160px); 
   position: relative;
   z-index: 2;
-  margin-top: 40px; /* Space below nav */
-  margin-bottom: 80px; /* Space above bottom buttons */
+  margin-top: 40px; 
+  margin-bottom: 80px; 
 }
 
 /* Centerpiece groups diamonds and input */
@@ -211,11 +209,11 @@
 }
 
 .intro-input::placeholder {
-  color: #1A1B1C; /* Same solid color as h1 had */
+  color: #1A1B1C; 
   font-size: inherit; 
   letter-spacing: inherit;
   font-weight: 400;
-  opacity: 1; /* No transparency */
+  opacity: 1; 
 }
 
 /* Hide placeholder on focus */
@@ -283,7 +281,7 @@
 
 /* Thank you / Success State */
 .intro-thank-you {
-  font-size: 48px; /* Smaller to match design */
+  font-size: 48px; 
   font-weight: 400;
   color: #1A1B1C;
   letter-spacing: -0.02em;

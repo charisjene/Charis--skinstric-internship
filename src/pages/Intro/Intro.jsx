@@ -201,7 +201,7 @@ const Intro = () => {
                     value={currentValue}
                     onChange={handleInputChange}
                     autoComplete="off"
-                    autoFocus
+                    autoFocus={false}                    
                     key={currentStep}
                     ref={inputRef}
                     style={{
