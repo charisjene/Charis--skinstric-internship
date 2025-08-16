@@ -124,21 +124,83 @@ const Demographics = () => {
     }
   };
 
-  const getSelectedConfidence = () => {
-    if (selectedTab === 'race' && demographics?.race_confidences) {
-      const raceData = demographics.race_confidences.find(
-        (item) => item.race === selectedRace
-      );
-      return raceData?.confidence || 0;
-    } else if (selectedTab === 'age') {
-      const ageData = ageRanges.find(item => item.range === selectedAge);
-      return ageData?.confidence || 96;
-    } else if (selectedTab === 'sex') {
-      const sexData = sexOptions.find(item => item.option === selectedSex);
-      return sexData?.confidence || 52;
-    }
-    return demographics?.confidence_score || 85;
-  };
+ const getSelectedConfidence = () => {
+  if (selectedTab === 'race' && demographics?.race_confidences) {
+    const raceData = demographics.race_confidences.find(
+      (item) => item.race === selectedRace
+    );
+    return raceData?.confidence || 0;
+  } else if (selectedTab === 'age') {
+    const ageData = ageRanges.find(item => item.range === selectedAge);
+    return ageData?.confidence || 96;
+  } else if (selectedTab === 'sex') {
+    const sexData = sexOptions.find(item => item.option === selectedSex);
+    return sexData?.confidence || 52;
+  }
+  return demographics?.confidence_score || 85;
+};
+
+// 2. Update the confidence circle display (around line 250)
+<div className="confidence-percentage">{getSelectedConfidence().toFixed(2)}%</div>
+
+// 3. Update the race list items (around line 270)
+{selectedTab === 'race' && (
+  demographics?.race_confidences?.map((item, index) => (
+    <div
+      key={index}
+      className={`race-item ${selectedRace === item.race ? 'selected' : ''}`}
+      onClick={() => handleRaceSelection(item.race)}
+    >
+      <div className="race-checkbox">
+        <span className={`checkbox ${selectedRace === item.race ? 'checked' : ''}`}>
+          {selectedRace === item.race ? '◆' : '◇'}
+        </span>
+      </div>
+      <div className="race-name">{item.race}</div>
+      <div className="race-confidence">{item.confidence.toFixed(2)}%</div>
+    </div>
+  )) || (
+    <div className="no-data">No detailed race data available</div>
+  )
+)}
+
+// 4. Update the age ranges (around line 290)
+{selectedTab === 'age' && (
+  ageRanges.map((item, index) => (
+    <div
+      key={index}
+      className={`race-item ${selectedAge === item.range ? 'selected' : ''}`}
+      onClick={() => handleAgeSelection(item.range)}
+    >
+      <div className="race-checkbox">
+        <span className={`checkbox ${selectedAge === item.range ? 'checked' : ''}`}>
+          {selectedAge === item.range ? '◆' : '◇'}
+        </span>
+      </div>
+      <div className="race-name">{item.range}</div>
+      <div className="race-confidence">{item.confidence.toFixed(2)}%</div>
+    </div>
+  ))
+)}
+
+// 5. Update the sex options (around line 310)
+{selectedTab === 'sex' && (
+  sexOptions.map((item, index) => (
+    <div
+      key={index}
+      className={`race-item ${selectedSex === item.option ? 'selected' : ''}`}
+      onClick={() => handleSexSelection(item.option)}
+    >
+      <div className="race-checkbox">
+        <span className={`checkbox ${selectedSex === item.option ? 'checked' : ''}`}>
+          {selectedSex === item.option ? '◆' : '◇'}
+        </span>
+      </div>
+      <div className="race-name">{item.option}</div>
+      <div className="race-confidence">{item.confidence.toFixed(2)}%</div>
+    </div>
+  ))
+)}
 
   if (isLoading) {
     return (

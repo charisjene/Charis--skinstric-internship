@@ -80,36 +80,36 @@ const Camera = () => {
   };
 
   // Function to transform API response to our expected format
-  const transformAPIResponse = (apiData) => {
-    // Convert race data to sorted array format
-    const raceEntries = Object.entries(apiData.race).map(([race, confidence]) => ({
-      race: capitalizeWords(race),
-      confidence: Math.round(confidence * 100)
-    }));
-    
-    // Sort by confidence descending
-    raceEntries.sort((a, b) => b.confidence - a.confidence);
-    
-    // Get the highest confidence age range
-    const ageEntries = Object.entries(apiData.age);
-    const topAge = ageEntries.reduce((max, current) => 
-      current[1] > max[1] ? current : max
-    );
-    
-    // Get gender with highest confidence
-    const topGender = apiData.gender.male > apiData.gender.female ? 'Male' : 'Female';
-    
-    return {
-      race: raceEntries[0].race,
-      age: topAge[0],
-      sex: topGender,
-      race_confidences: raceEntries,
-      confidence_score: raceEntries[0].confidence,
-      timestamp: new Date().toISOString(),
-      source: 'api_phase_two',
-      raw_api_data: apiData
-    };
+const transformAPIResponse = (apiData) => {
+  // Convert race data to sorted array format with 2 decimal precision
+  const raceEntries = Object.entries(apiData.race).map(([race, confidence]) => ({
+    race: capitalizeWords(race),
+    confidence: parseFloat((confidence * 100).toFixed(2)) // Ensure 2 decimal places
+  }));
+  
+  // Sort by confidence descending
+  raceEntries.sort((a, b) => b.confidence - a.confidence);
+  
+  // Get the highest confidence age range
+  const ageEntries = Object.entries(apiData.age);
+  const topAge = ageEntries.reduce((max, current) => 
+    current[1] > max[1] ? current : max
+  );
+  
+  // Get gender with highest confidence
+  const topGender = apiData.gender.male > apiData.gender.female ? 'Male' : 'Female';
+  
+  return {
+    race: raceEntries[0].race,
+    age: topAge[0],
+    sex: topGender,
+    race_confidences: raceEntries,
+    confidence_score: raceEntries[0].confidence,
+    timestamp: new Date().toISOString(),
+    source: 'api_phase_two',
+    raw_api_data: apiData
   };
+};
 
   // Helper function to capitalize words
   const capitalizeWords = (str) => {
@@ -119,37 +119,36 @@ const Camera = () => {
   };
 
   // Function to generate mock demographic data for testing
-  const generateMockDemographics = () => {
-    const races = ['White', 'Black', 'Asian', 'Hispanic', 'Middle Eastern', 'Indian'];
-    const ages = ['18-24', '25-34', '35-44', '45-54', '55-64', '65+'];
-    const sexes = ['Male', 'Female'];
-    
-    // Generate random confidences
-    const raceConfidences = races.map(race => ({
-      race,
-      confidence: Math.floor(Math.random() * 30) + 10 // 10-40% confidence
-    }));
-    
-    // Normalize to 100%
-    const total = raceConfidences.reduce((sum, item) => sum + item.confidence, 0);
-    raceConfidences.forEach(item => {
-      item.confidence = Math.round((item.confidence / total) * 100);
-    });
-    
-    // Sort by confidence descending
-    raceConfidences.sort((a, b) => b.confidence - a.confidence);
-    
-    return {
-      race: raceConfidences[0].race,
-      age: ages[Math.floor(Math.random() * ages.length)],
-      sex: sexes[Math.floor(Math.random() * sexes.length)],
-      race_confidences: raceConfidences,
-      confidence_score: raceConfidences[0].confidence,
-      timestamp: new Date().toISOString(),
-      source: 'camera_capture',
-      isMockData: true
-    };
+const generateMockDemographics = () => {
+  const races = ['White', 'Black', 'Asian', 'Hispanic', 'Middle Eastern', 'Indian'];
+  const ages = ['18-24', '25-34', '35-44', '45-54', '55-64', '65+'];
+  const sexes = ['Male', 'Female'];
+  
+  // Generate random confidences with decimal precision
+  const raceConfidences = races.map(race => ({
+    race,
+    confidence: parseFloat((Math.random() * 30 + 10).toFixed(2)) // 10.00-40.00% confidence
+  }));
+  
+  // Normalize to 100% while maintaining decimal precision
+  const total = raceConfidences.reduce((sum, item) => sum + item.confidence, 0);
+  raceConfidences.forEach(item => {
+    item.confidence = parseFloat(((item.confidence / total) * 100).toFixed(2));
+  });
+  
+  // Sort by confidence descending
+  raceConfidences.sort((a, b) => b.confidence - a.confidence);
+  
+  return {
+    race: raceConfidences[0].race,
+    age: ages[Math.floor(Math.random() * ages.length)],
+    sex: sexes[Math.floor(Math.random() * sexes.length)],
+    race_confidences: raceConfidences,
+    confidence_score: raceConfidences[0].confidence,
+    timestamp: new Date().toISOString(),
+    source: 'camera_capture', 
   };
+};
 
   const handleProceed = async () => {
     if (!capturedImage) {
