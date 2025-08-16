@@ -77,17 +77,17 @@ const FaceScan = () => {
     setShowGalleryPermissionModal(false);
   };
 
-  const handleFileSelect = async (event) => {
+const handleFileSelect = async (event) => {
   const file = event.target.files[0];
-  if (!file) {
-    return;
-  }
+  if (!file) return;
 
-  // Validate file type and size
+  // Validate file type
   if (!file.type.startsWith('image/')) {
     alert('Please select a valid image file (JPEG, PNG, etc.)');
     return;
   }
+
+  // Validate file size (max 10MB)
   const maxSize = 10 * 1024 * 1024; // 10MB
   if (file.size > maxSize) {
     alert('Image file is too large. Please select an image smaller than 10MB.');
@@ -95,89 +95,89 @@ const FaceScan = () => {
   }
 
   setIsProcessingGallery(true);
-  
-  // ************************************************************
-  // CORRECTED LINE: Declare the variable outside the try block
-  let base64Image = null; 
-  // ************************************************************
 
   try {
     // Convert file to base64
-    base64Image = await convertFileToBase64(file);
-
-    // Ensure the Base64 string is not empty before proceeding
-    if (!base64Image) {
-        throw new Error('Image conversion failed. The Base64 string is empty.');
-    }
-
-    // Remove the data URI header from the string
-    base64Image = base64Image.split(',')[1];
+    const base64DataUrl = await convertFileToBase64(file);
     
-    // Ensure the Base64 string is not empty after removing the header
-    if (!base64Image) {
-        throw new Error('Image data is missing after processing. Please try a different image.');
-    }
-
+    // Remove the data URL prefix to get just the base64 string
+    const base64Image = base64DataUrl.split(',')[1];
+    
     console.log('Processing uploaded image...');
-
+    
+    // Get user data from localStorage
+    const userData = JSON.parse(localStorage.getItem('skinstric_user_data') || '{}');
+    
+    // Send image to API for demographic analysis using Phase Two endpoint
     const response = await fetch('https://us-central1-frontend-simplified.cloudfunctions.net/skinstricPhaseTwo', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        Image: base64Image
+        image: base64Image // Note: lowercase 'image' field name
       })
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('API Error Response:', errorText);
       throw new Error(`API Error: ${response.status} - ${response.statusText}. Details: ${errorText}`);
     }
 
     const result = await response.json();
     console.log('Gallery image analysis result:', result);
     
-    // Check if the API returned a success status but without the data.
-    if (result.success === false) {
-      throw new Error(result.message || 'API analysis failed with an unknown error.');
+    // Transform the API response to our expected format
+    let demographicsData;
+    if (result.data && result.data.race && result.data.age && result.data.gender) {
+      demographicsData = transformAPIResponse(result.data);
+    } else {
+      console.log('API response format unexpected, using mock data');
+      demographicsData = generateMockDemographics();
+      demographicsData.apiMessage = JSON.stringify(result);
+      demographicsData.isSimulated = true;
     }
     
     // Store both the image and analysis result in localStorage
-    localStorage.setItem('skinstric_captured_photo', `data:${file.type};base64,${base64Image}`);
-    localStorage.setItem('skinstric_demographics', JSON.stringify(transformAPIResponse(result.data)));
-
-    navigate('/analysis', {
-      state: {
-        analysisData: {
-          demographicsData: transformAPIResponse(result.data),
-          photoData: `data:${file.type};base64,${base64Image}`,
-          source: 'gallery'
-        }
-      }
-    });
-
-  } catch (error) {
-    console.error('Error processing gallery image:', error);
-    alert(`Analysis failed: ${error.message}. Please try again with a different image.`);
+    localStorage.setItem('skinstric_captured_photo', base64DataUrl);
+    localStorage.setItem('skinstric_demographics', JSON.stringify(demographicsData));
     
-    // Since base64Image is now in scope, this should work.
-    const mockDemographics = generateMockDemographics();
-    localStorage.setItem('skinstric_captured_photo', `data:${file.type};base64,${base64Image}`);
-    localStorage.setItem('skinstric_demographics', JSON.stringify(mockDemographics));
+    // Navigate directly to Analysis page with the data
     navigate('/analysis', { 
       state: { 
         analysisData: {
-          demographicsData: mockDemographics,
-          photoData: `data:${file.type};base64,${base64Image}`,
+          demographicsData: demographicsData,
+          photoData: base64DataUrl,
           source: 'gallery'
         }
       } 
     });
-
+    
+  } catch (error) {
+    console.error('Error processing gallery image:', error);
+    
+    // Show user-friendly error message
+    alert(`Analysis failed: ${error.message}. Please try again with a different image.`);
+    
+    // For development/testing purposes, create mock data and proceed
+    const base64DataUrl = await convertFileToBase64(file);
+    const mockDemographics = generateMockDemographics();
+    
+    localStorage.setItem('skinstric_captured_photo', base64DataUrl);
+    localStorage.setItem('skinstric_demographics', JSON.stringify(mockDemographics));
+    
+    navigate('/analysis', { 
+      state: { 
+        analysisData: {
+          demographicsData: mockDemographics,
+          photoData: base64DataUrl,
+          source: 'gallery'
+        }
+      } 
+    });
   } finally {
     setIsProcessingGallery(false);
+    // Reset file input
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
