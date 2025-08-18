@@ -368,15 +368,6 @@
     transform: translate(-50%, -50%) rotate(-45deg) scale(0.7);
 }
 
-/* .button-arrow {
-    position: absolute;
-    left: 107px;
-    top: 9px;
-    transform: scale(0.9);
-    cursor: pointer;
-    transition: transform 0.3s;
-} */
-
 .btn-arrow.right-arrow {
     position: absolute;
     top: 50%;
@@ -507,6 +498,118 @@
     font-weight: 400;
 }
 
+/* Default: hide the mobile-only bits on desktop */
+.center__body,
+.center__cta { display: none; }
 
+/* --- Small screens: tablet & below --- */
+@media (max-width: 1024px) {
+  /* Remove desktop chrome */
+  .left__section, .left__section *,
+  .right__section, .right__section *,
+  .bottom__text {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
 
+  /* Main centered stage */
+  .center__container {
+    position: relative;
+    inset: auto;
+    transform: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  
+    width: 100%;
+    min-height: calc(100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    padding: max(24px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+    text-align: center;
+    box-sizing: border-box;
+  }
 
+  /* 2 concentric diamonds that always fit */
+  .center__container::before,
+  .center__container::after {
+    content: "";
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: min(72vmin, 60vw);
+    height: min(72vmin, 60vw);
+    border: 4px dotted rgba(26,27,28,.25);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .center__container::after {
+    width: min(52vmin, 52vw);
+    height: min(52vmin, 52vw);
+    border-color: rgba(26,27,28,.2);
+  }
+
+  /* Bring content above diamonds */
+  .main__heading { position: relative; z-index: 1; }
+
+  /* Headline scales like the reference */
+  .main__heading h1 {
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+    margin: 0 0 1.5rem;
+    font-size: clamp(34px, 12vw, 64px);
+  }
+
+  /* Gray paragraph under headline */
+  .center__body {
+    display: block;
+    margin: 0 auto 1.5rem;
+    max-width: 34ch;
+    font-size: clamp(12px, 2.8vw, 16px);
+    line-height: 1.6;
+    color: rgba(26,27,28,.65);
+  }
+
+  /* CTA */
+  .center__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #1A1B1C;
+  }
+  .responsive__link {
+    color: #1A1B1C;
+    font-weight: 600;;
+  }
+  .center__cta .diamond-shape {
+    width: 28px; height: 28px;
+    border: 1px solid rgba(26,27,28,.6);
+    transform: rotate(45deg);
+    display: inline-flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .center__cta .diamond-shape::after {
+    content: ""; position: absolute; inset: 4px; border: 1px dashed #A0A4AB;
+  }
+  .center__cta .diamond-arrow { transform: rotate(-45deg); font-size: 10px; line-height: 1; }
+
+  /* Keep nav from overlapping */
+  .nav__container { position: fixed; top: 0; left: 0; right: 0; }
+}
+
+/* --- Phones: tighten a bit more --- */
+@media (max-width: 600px) {
+  .main__heading h1 { font-size: clamp(34px, 12.5vw, 64px); }
+  .center__container::before { width: min(86vmin, 96vw); height: min(86vmin, 96vw); }
+  .center__container::after  { width: min(66vmin, 76vw); height: min(66vmin, 76vw); }
+}
+
+/* Motion safety */
+@media (prefers-reduced-motion: reduce) {
+  .center__container::before,
+  .center__container::after { transition: none; }
+}
