@@ -1,0 +1,87 @@
+.diamond-wrapper {
+  position: relative;
+  width: 484px;
+  height: 484px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.diamond {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+}
+
+/* Large diamond - use original size */
+.diamond.large {
+  width: 460px;
+  height: 460px;
+  opacity: .8;  /* Match your original large diamond opacity */
+  animation: spinSlow 30s linear infinite;
+}
+
+/* Medium diamond - scale down to ~92% */
+.diamond.medium {
+  width: 420px;  /* 92% of 484px */
+  height: 420px;
+  opacity: 1.5;  /* Match your original medium diamond opacity */
+  animation: spinSlower 60s linear infinite;
+}
+
+/* Small diamond - scale down to ~84% */
+.diamond.small {
+  width: 380px;  /* 84% of 484px */
+  height: 380px;
+  opacity: 2.0;  /* Match your original small diamond opacity */
+  animation: spinSlowest 90s linear infinite;
+}
+
+.center-icon {
+  position: relative;
+  width: 174px;
+  height: 174px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  z-index: 10;
+}
+
+.center-icon:hover {
+  transform: scale(1.08);
+}
+
+@keyframes spinSlow {
+  from { 
+    transform: translate(-50%, -50%) rotate(0deg); 
+  }
+  to { 
+    transform: translate(-50%, -50%) rotate(360deg); 
+  }
+}
+
+@keyframes spinSlower {
+  from { 
+    transform: translate(-50%, -50%) rotate(0deg); 
+  }
+  to { 
+    transform: translate(-50%, -50%) rotate(360deg); 
+  }
+}
+
+@keyframes spinSlowest {
+  from { 
+    transform: translate(-50%, -50%) rotate(0deg); 
+  }
+  to { 
+    transform: translate(-50%, -50%) rotate(360deg); 
+  }
+}
+
+.loading-text-overlay {
+  position: absolute;
+  top: 110%;
+  width: 100%;
+  text-align: center;
+}

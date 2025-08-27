@@ -2,10 +2,11 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import camera from '../../assets/camera.svg'; 
 import gallery from '../../assets/gallery.svg'; 
-import camBorder from '../../assets/cameraBorder.svg';
-import galleryBorder from '../../assets/galleryBorder.svg';
+import camAccess from '../../assets/accessCamera.svg';
+import galleryAccess from '../../assets/accessGallery.svg';
 import './FaceScan.css';
 import Nav from '../../Nav';
+import RotatingDiamonds from '../../components/RotatingDiamonds/RotatingDiamonds';
 
 const FaceScan = () => {
   const [showCameraPermissionModal, setShowCameraPermissionModal] = useState(false);
@@ -291,14 +292,20 @@ const generateMockDemographics = () => {
           <section className="facescan-content">
             {/* Left Option - AI Scan */}
             <div className="option-container">
-              <button className="option-btn" onClick={handleAIScan}>
-           
-             
-                  {/* Camera icon centered */}
-                  <img src={camBorder} alt="Camera" className="option-icon" />
-              
-              
-              </button>
+               <button className="option-btn" onClick={handleAIScan}>
+    <div className="icon-with-diamonds">
+      <RotatingDiamonds
+  icon={camera}
+  alt="Camera"
+  onClick={handleAIScan}
+  show={!isSettingUpCamera}
+/>
+      <div className="label-container camera">
+        <span className="pointer-dot"></span>
+        <img src={camAccess} alt="" className="icon-label" />
+      </div>
+    </div>
+  </button>
               {/* Camera Permission Modal - positioned relative to this container */}
               {showCameraPermissionModal && (
                 <div className="permission-modal">
@@ -318,14 +325,21 @@ const generateMockDemographics = () => {
 
             {/* Right Option - Access Gallery */}
             <div className="option-container">
-              <button className="option-btn" onClick={handleAccessGallery}>
-              
-                 
-                  {/* Gallery icon centered */}
-                  <img src={galleryBorder} alt="Gallery" className="option-icon" />
-              
-            
-              </button>
+  <button className="option-btn" onClick={handleAccessGallery}>
+    <div className="icon-with-diamonds">
+      <RotatingDiamonds
+  icon={gallery}
+  alt="Gallery"
+  onClick={handleAccessGallery}
+  show={!isProcessingGallery}
+/>
+      <div className="label-container gallery">
+        <span className="pointer-dot"></span>
+        <img src={galleryAccess} alt="" className="icon-label" />
+      </div>
+    </div>
+  </button>
+
               {/* Gallery Permission Modal - positioned relative to this container */}
               {showGalleryPermissionModal && (
                 <div className="gallery-modal">
@@ -346,12 +360,7 @@ const generateMockDemographics = () => {
         ) : isSettingUpCamera ? (
           /* Loading State - Setting up camera */
           <section className="camera-loading">
-            <div className="loading-diamond-container">
-                <div className="diamond diamond-small"></div>
-                <div className="diamond diamond-medium"></div>
-                <div className="diamond diamond-large"></div>
-              <img src={camera} alt="Camera" className="loading-icon" />
-            </div>
+            <RotatingDiamonds icon={camera} alt="Camera" show={true} />
             <p className="loading-text">SETTING UP CAMERA ...</p>
             
             <p className="loading-subtitle">TO GET BETTER RESULTS MAKE SURE TO HAVE</p>
@@ -364,12 +373,7 @@ const generateMockDemographics = () => {
         ) : (
           /* Loading State - Processing Gallery Image */
           <section className="gallery-loading">
-            <div className="loading-diamond-container">
-                <div className="diamond diamond-small"></div>
-                <div className="diamond diamond-medium"></div>
-                <div className="diamond diamond-large"></div>
-              <img src={gallery} alt="Gallery" className="loading-icon" />
-            </div>
+            <RotatingDiamonds icon={gallery} alt="Gallery" loading={true} />
             <p className="loading-text">ANALYZING IMAGE ...</p>
             
             <p className="loading-subtitle">PROCESSING YOUR UPLOADED PHOTO</p>

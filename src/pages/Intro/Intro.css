@@ -19,6 +19,11 @@
   z-index: 100;
 }
 
+.intro-main-flex,
+.intro-main {
+  overflow: visible;
+}
+
 /* Center the main content vertically and horizontally */
 .intro-main {
   display: flex;
@@ -27,7 +32,6 @@
   min-height: 100vh;
   position: relative;
 }
-
 
 .intro-main-flex {
   display: flex;
@@ -57,9 +61,7 @@
   width: 360px;
   height: 360px;
   margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: visible;
 }
 
 /* Input content is centered and above diamonds */
@@ -76,9 +78,8 @@
   pointer-events: auto;
   background: transparent;
   text-align: center;
-  /* Remove extra margins if any */
+  overflow: visible;
 }
-
 
 .diamond {
   position: absolute;
@@ -96,7 +97,6 @@
   animation: spin-slowest 120s linear infinite;
 }
 
-
 .diamond-medium {
   width: 350px;
   height: 350px;
@@ -104,7 +104,6 @@
   transform: translate(-50%, -50%) rotate(185deg);
   animation: spin-slower 90s linear infinite;
 }
-
 
 .diamond-large {
   width: 420px;
@@ -172,7 +171,7 @@
 
 /* Click to Type Label */
 .intro-label {
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 400;
   color: rgba(26, 27, 28, 0.4);
   text-transform: uppercase;
@@ -186,18 +185,16 @@
   width: auto !important;
   display: block !important;
   text-align: center;
+  overflow: visible;
+  white-space: nowrap; 
 }
 
-/* Input Field - Now with large text for both input and placeholder */
+/* Input Field */
 .intro-input {
-  display: inline-block;
-  width: auto !important;
-  /* min-width: 2ch; */
-  max-width: 100%;
   border: none;
   border-bottom: 1px solid #000;
   background: transparent;
-  font-size: 32px;
+  font-size: 48px;
   font-weight: 400;
   text-align: center;
   color: #1A1B1C;
@@ -335,8 +332,6 @@
   transition: background-color 0.3s ease;
 }
 
-
-
 /* Proceed Arrow */
 .intro-proceed-arrow {
   transform: rotate(-45deg);
@@ -345,8 +340,6 @@
   line-height: 1;
   transition: color 0.3s ease;
 }
-
-
 
 /* Responsive adjustments for loading/success states */
 @media (max-width: 640px) {
@@ -427,8 +420,6 @@
   transition: all 0.3s ease;
 }
 
-
-
 /* Back Arrow */
 .intro-back-arrow {
   transform: rotate(-45deg);
@@ -439,16 +430,7 @@
   transition: color 0.3s ease;
 }
 
-
-
-/* Diamond Border Styles */
-.diamond-container {
-  position: relative;
-  width: 360px;
-  height: 360px;
-  margin: 0 auto;
-}
-
+/* Diamond Border Styles - NOW WITH ROTATION ANIMATIONS */
 .outer-diamond-border {
   position: absolute;
   top: 50%;
@@ -458,26 +440,34 @@
   transform: translate(-50%, -50%) rotate(45deg);
   border: 4px dotted rgba(160, 164, 171, 1);
   pointer-events: none;
+  animation: spin-slowest 120s linear infinite;
+  transform-origin: center;
 }
+
 .outer-diamond-border-2 {
   position: absolute;
   top: 50%;
   left: 50%;
   width: 420px;
   height: 420px;
-  transform: translate(-50%, -50%) rotate(45deg);
+  transform: translate(-50%, -50%) rotate(185deg);
   border: 4px dotted rgba(160, 164, 171, .6);
   pointer-events: none;
+  animation: spin-slower 90s linear infinite;
+  transform-origin: center;
 }
+
 .outer-diamond-border-3 {
   position: absolute;
   top: 50%;
   left: 50%;
   width: 480px;
   height: 480px;
-  transform: translate(-50%, -50%) rotate(45deg);
+  transform: translate(-50%, -50%) rotate(190deg);
   border: 4px dotted rgba(160, 164, 171, 0.3);
   pointer-events: none;
+  animation: spin-slow 60s linear infinite;
+  transform-origin: center;
 }
 
 /* Responsive Design */

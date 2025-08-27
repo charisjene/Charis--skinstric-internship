@@ -14,8 +14,6 @@ const Intro = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const inputRef = useRef(null);
-  const mirrorRef = useRef(null);
-  const [inputWidth, setInputWidth] = useState(0);
 
   // Load data from localStorage on component mount
   useEffect(() => {
@@ -37,38 +35,6 @@ const Intro = () => {
   const currentValue = currentStep === 1 ? formData.name : formData.location;
   const currentPlaceholder = currentStep === 1 ? "Introduce Yourself" : "Where are you from?";
 
-  // Calculate maximum width based on screen size and diamond constraints
-  const getMaxInputWidth = () => {
-    const screenWidth = window.innerWidth;
-    if (screenWidth >= 768) return 280; // Desktop
-    if (screenWidth >= 640) return 140; // Tablet
-    if (screenWidth >= 480) return 120; // Mobile
-    return 100; // Small mobile
-  };
-
-  // Update input width to match text or placeholder, but constrain to diamond
-  useEffect(() => {
-    if (mirrorRef.current) {
-      const measuredWidth = mirrorRef.current.offsetWidth + 2; // +2 for caret
-      const maxWidth = getMaxInputWidth();
-      setInputWidth(Math.min(measuredWidth, maxWidth));
-    }
-  }, [currentValue, currentPlaceholder, currentStep]);
-
-  // Handle window resize to recalculate constraints
-  useEffect(() => {
-    const handleResize = () => {
-      if (mirrorRef.current) {
-        const measuredWidth = mirrorRef.current.offsetWidth + 2;
-        const maxWidth = getMaxInputWidth();
-        setInputWidth(Math.min(measuredWidth, maxWidth));
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [currentValue, currentPlaceholder]);
-
   const saveToLocalStorage = (data) => {
     try {
       localStorage.setItem('skinstric_user_data', JSON.stringify(data));
@@ -88,7 +54,7 @@ const Intro = () => {
         },
         body: JSON.stringify({
           ...data,
-          type: 'user_info' // Add type to distinguish from other requests
+          type: 'user_info'
         })
       });
 
@@ -101,38 +67,29 @@ const Intro = () => {
       return result;
     } catch (err) {
       console.error('Error saving data to API:', err);
-      // Don't throw here - we'll save to localStorage as fallback
       return null;
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (currentStep === 1 && formData.name.trim()) {
-      // Move to location question
       setCurrentStep(2);
     } else if (currentStep === 2 && formData.location.trim()) {
-      // Both fields complete - save data
       setIsSubmitting(true);
       setError(null);
-      
+
       const dataToSave = {
         name: formData.name.trim(),
         location: formData.location.trim(),
         timestamp: new Date().toISOString()
       };
-      
+
       try {
-        // Always save to localStorage first
         saveToLocalStorage(dataToSave);
-        
-        // Try to save to API (but don't fail if it doesn't work)
         await saveToAPI(dataToSave);
-        
-        // Show success state
         setIsComplete(true);
-        
       } catch (err) {
         setError(err.message);
         setIsSubmitting(false);
@@ -147,8 +104,7 @@ const Intro = () => {
       [field]: e.target.value
     };
     setFormData(newFormData);
-    
-    // Save to localStorage in real-time
+
     if (newFormData.name || newFormData.location) {
       try {
         saveToLocalStorage({
@@ -159,8 +115,7 @@ const Intro = () => {
         console.error('Error saving to localStorage in real-time:', err);
       }
     }
-    
-    // Clear any previous errors when user starts typing
+
     if (error) setError(null);
   };
 
@@ -173,7 +128,6 @@ const Intro = () => {
   };
 
   const handleProceed = () => {
-    // Navigate to FaceScan page when proceed is clicked
     navigate('/facescan');
   };
 
@@ -187,13 +141,11 @@ const Intro = () => {
           <div className="outer-diamond-border-2"></div>
           <div className="outer-diamond-border-3"></div>
           <section className="intro-content">
-            {/* Show different content based on state */}
             {!isSubmitting && !isComplete ? (
               <>
-                {/* Normal input state */}
                 <p className="intro-label">CLICK TO TYPE</p>
-                
-                <form className="intro-form" onSubmit={handleSubmit} style={{ position: 'relative' }}>
+
+                <form className="intro-form" onSubmit={handleSubmit}>
                   <input
                     className="intro-input"
                     type="text"
@@ -201,33 +153,11 @@ const Intro = () => {
                     value={currentValue}
                     onChange={handleInputChange}
                     autoComplete="off"
-                    autoFocus={false}                    
+                    autoFocus={false}
                     key={currentStep}
                     ref={inputRef}
-                    style={{
-                      width: inputWidth ? `${inputWidth}px` : undefined,
-                      maxWidth: `${getMaxInputWidth()}px`,
-                    }}
+                    // Remove all width constraints - let text flow naturally
                   />
-                  {/* Mirror span for autosizing */}
-                  <span
-                    ref={mirrorRef}
-                    style={{
-                      position: 'absolute',
-                      visibility: 'hidden',
-                      height: 0,
-                      overflow: 'hidden',
-                      whiteSpace: 'pre',
-                      fontSize: window.getComputedStyle(inputRef.current || document.body).fontSize || '64px',
-                      fontWeight: window.getComputedStyle(inputRef.current || document.body).fontWeight || 400,
-                      fontFamily: window.getComputedStyle(inputRef.current || document.body).fontFamily || 'inherit',
-                      letterSpacing: window.getComputedStyle(inputRef.current || document.body).letterSpacing || '-0.02em',
-                      padding: 0,
-                      border: 0,
-                    }}
-                  >
-                    {currentValue || currentPlaceholder}
-                  </span>
                 </form>
 
                 {error && (
@@ -238,7 +168,6 @@ const Intro = () => {
               </>
             ) : isSubmitting && !isComplete ? (
               <>
-                {/* Loading state */}
                 <h2 className="intro-processing">Processing submission</h2>
                 <div className="intro-loading-dots">
                   <span className="dot"></span>
@@ -248,7 +177,6 @@ const Intro = () => {
               </>
             ) : (
               <>
-                {/* Success state */}
                 <h2 className="intro-thank-you">Thank you, {formData.name}!</h2>
                 <p className="intro-proceed">Proceed for the next step</p>
               </>
@@ -257,9 +185,8 @@ const Intro = () => {
         </div>
       </div>
 
-      {/* Back button - ALWAYS visible in bottom left */}
-      <button 
-        className="intro-back" 
+      <button
+        className="intro-back"
         onClick={handleBack}
         disabled={isSubmitting}
       >
@@ -269,10 +196,9 @@ const Intro = () => {
         BACK
       </button>
 
-      {/* Proceed button - visible only in success state (bottom right) */}
       {isComplete && (
-        <button 
-          className="intro-proceed-btn" 
+        <button
+          className="intro-proceed-btn"
           onClick={handleProceed}
         >
           PROCEED

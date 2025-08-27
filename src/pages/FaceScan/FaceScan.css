@@ -48,6 +48,26 @@
   align-items: center;
 }
 
+.label-container.camera {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(20%, 144%); 
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.label-container.gallery {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transform: translate(-15%, -110%); 
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .option-btn {
   background: none;
   border: none;
@@ -57,77 +77,18 @@
   position: relative;
 }
 
-
-
 .option-btn:hover {
   transform: scale(1.02);
 }
 
-/* Option group containing diamonds and icon */
-.option-group {
+.icon-with-diamonds {
   position: relative;
-  width: 300px;
-  height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-/* Diamond group container */
-.diamond-group {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-/* Individual diamonds - static, no rotation */
 .diamond {
   position: absolute;
   border: 4px dotted rgba(26, 27, 28, 0.2);
   transform: rotate(45deg);
-}
-
-/* Diamond 1 - Smallest/innermost */
-.diamond-1 {
-  width: 180px;
-  height: 180px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(45deg);
-  border-color: rgba(26, 27, 28, 0.4);
-}
-
-/* Diamond 2 - Medium */
-.diamond-2 {
-  width: 240px;
-  height: 240px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(45deg);
-  border-color: rgba(26, 27, 28, 0.25);
-}
-
-/* Diamond 3 - Largest/outermost */
-.diamond-3 {
-  width: 300px;
-  height: 300px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(45deg);
-  border-color: rgba(26, 27, 28, 0.1);
-}
-
-/* Added Diamond 4 for better fading */
-.diamond-group::after {
-  content: '';
-  position: absolute;
-  width: 360px;
-  height: 360px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(45deg);
-  border: 4px dotted rgba(26, 27, 28, 0.05);
 }
 
 /* Option icons - centered */
@@ -204,7 +165,6 @@
 /* Line for gallery label */
 .option-container:last-child .option-label::after {
   content: '';
-  /* position: absolute; */
   width: 102px;
   height: 1px;
   background-color: #1A1B1C;
@@ -223,56 +183,6 @@
   justify-content: center;
   z-index: 10;
   position: absolute;
-}
-
-/* Loading diamond container */
-.loading-diamond-container {
-  position: relative;
-  width: 200px;
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 40px;
-}
-
-.diamond-small {
-  width: 220px;
-  height: 220px;
-  border-color: rgba(26, 27, 28, 0.3);
-  transform: translate(-50%, -50%) rotate(45deg);
-  animation: spin-slowest 10s linear infinite;
-}
-
-.diamond-medium {
-  width: 260px;
-  height: 260px;
-  border-color: rgba(26, 27, 28, 0.2);
-  transform: translate(-50%, -50%) rotate(185deg);
-  animation: spin-slower 15s linear infinite;
-}
-
-.diamond-large {
-  width: 280px;
-  height: 280px;
-  border-color: rgba(26, 27, 28, 0.15);
-  transform: translate(-50%, -50%) rotate(190deg);
-  animation: spin-slow 20s linear infinite;
-}
-
-@keyframes spin-slow {
-  from { transform: translate(-50%, -50%) rotate(0deg); }
-  to { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-@keyframes spin-slower {
-  from { transform: translate(-50%, -50%) rotate(0deg); }
-  to { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-@keyframes spin-slowest {
-  from { transform: translate(-50%, -50%) rotate(0deg); }
-  to { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
 .loading-icon {
@@ -465,16 +375,6 @@
     flex-direction: column;
     gap: 80px;
   }
-  
-  .option-group {
-    width: 250px;
-    height: 250px;
-  }
-  
-  .diamond-1 { width: 150px; height: 150px; }
-  .diamond-2 { width: 200px; height: 200px; }
-  .diamond-3 { width: 250px; height: 250px; }
-  .diamond-group::after { width: 300px; height: 300px; }
 
   .permission-modal {
     left: 210px;
@@ -488,16 +388,6 @@
 }
 
 @media (max-width: 480px) {
-  .option-group {
-    width: 200px;
-    height: 200px;
-  }
-  
-  .diamond-1 { width: 120px; height: 120px; }
-  .diamond-2 { width: 160px; height: 160px; }
-  .diamond-3 { width: 200px; height: 200px; }
-  .diamond-group::after { width: 240px; height: 240px; }
-  
   .option-icon {
     width: 60px;
     height: 60px;
